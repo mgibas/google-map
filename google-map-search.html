@@ -121,6 +121,15 @@ information on the API.
         type: Object,
         value: null,
         readOnly: true
+      },
+
+      /**
+       * True while search is in flight.
+       */
+      searching: {
+        type: Boolean,
+        notify: true,
+        readOnly: true
       }
     },
 
@@ -159,6 +168,9 @@ information on the API.
         } else if (!this.globalSearch) {
           var bounds = this.map.getBounds();
         }
+
+        this.searching = true;
+        
         places.textSearch({
           query: this.query,
           types: types,
@@ -196,6 +208,7 @@ information on the API.
         result.longitude = result.geometry.location.lng();
         return result;
       });
+      this.searching = false;
       this.fire('google-map-search-results', this.results);
     },
 
